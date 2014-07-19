@@ -42,8 +42,6 @@
 jQuery(function($){
   // Globals
   var
-  yql = "https://query.yahooapis.com/v1/public/yql?q=select%20title%2C%20enclosure.url%2C%20link%20from%20rss%20where%20url%3D%22http%3A%2F%2Fwww.nasa.gov%2Frss%2Fdyn%2Flg_image_of_the_day.rss%22&format=json&callback=",
-  
   config = {
     slideshow: 1, autoplay: 1,
 
@@ -61,7 +59,40 @@ jQuery(function($){
     fit_portrait: 1, // portrait images will not be exceed browser
 
     slide_links: 'name', progress_bar: 0, thumb_links: 0, thumbnail_navigation: 0
-  };
+  },
+  
+  images = [
+    {
+      image: "img/keshav1.jpg",
+      title: "Can't come up with something for this one."
+    },
+    {
+      image: "img/keshav2.jpg",
+      title: "Sex is all I want!"
+    },
+    {
+      image: "img/keshav3.jpg",
+      title: "THere's someone fucking in the bushes."
+    },
+    {
+      image: "img/keshav4.jpg",
+      title: "Is this what I went to MIT for?"
+    },
+    {
+      image: "img/keshav5.jpg",
+      title: "Writing a love letter (that was never sent)"
+    },
+    {
+      image: "img/keshav6.jpg",
+      title: "Full plastic jacket"
+    },
+    {
+      image: "img/keshav7.jpg",
+      title: "Dude, capitalism is good."
+    },
+    ];
+  
+  $.supersized(_(config).extend({slides: images}));
 
   $.getJSON(yql)
   .then(function(response){
