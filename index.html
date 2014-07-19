@@ -1,0 +1,81 @@
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="css/supersized.css"/>
+<style>
+  ul#slide-list {
+    display: block;
+    position: fixed;
+    bottom: 2em;
+    
+    width: 100%;
+    text-align: center;
+  }
+  #slide-list li {
+    display: none;
+    
+    font-size: 2em;
+    font-family: Lato, sans-serif;
+    
+    color: white;
+    background-color: black;
+    opacity: 0.5;
+    box-shadow: 0px 0px 8px 0px rgba(200, 228, 255, 0.75);
+    
+    padding: 0.4em 1.2em;
+    border-radius: 1px;
+  }
+  #slide-list li.current-slide {
+    display: inline-block;
+  }
+</style>
+
+<main>
+  <ul id="slide-list"></ul>
+</main>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/jquery.easing.js"></script>
+<script src="js/supersized.3.2.7.js"></script>
+
+<script>
+// Wrap on dom ready function
+jQuery(function($){
+  // Globals
+  var
+  yql = "https://query.yahooapis.com/v1/public/yql?q=select%20title%2C%20enclosure.url%2C%20link%20from%20rss%20where%20url%3D%22http%3A%2F%2Fwww.nasa.gov%2Frss%2Fdyn%2Flg_image_of_the_day.rss%22&format=json&callback=",
+  
+  config = {
+    slideshow: 1, autoplay: 1,
+
+    start_slide: 0, /* random */ stop_loop: 0, slide_interval: 6400,
+
+    transition: 1, // fade
+    transition_speed: 1600,
+    
+    new_window: 1, // Open links in new tab
+    
+    pause_hover: 0, keyboard_nav: 0,
+    image_protect: 1, // disable dragging of image
+    
+    vertical_center: 1, horizontal_center: 1,
+    fit_portrait: 1, // portrait images will not be exceed browser
+
+    slide_links: 'name', progress_bar: 0, thumb_links: 0, thumbnail_navigation: 0
+  };
+
+  $.getJSON(yql)
+  .then(function(response){
+    var images = _(response.query.results.item).map(function(k) {
+      return {
+        image: k.enclosure.url,
+        title: k.title,
+        url: k.link
+      };
+    });
+
+    $.supersized(_(config).extend({slides: images}));
+  })
+  .done(function(){});
+});
+
+</script>
